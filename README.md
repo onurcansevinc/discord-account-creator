@@ -9,12 +9,12 @@ With this script you can create Discord accounts for get a tokens.
 ## Clone the bot and install dependencies
 
 ```
-git clone -b dev git@github.com:onurcansevinc/discord-account-creator.git
+git clone https://github.com/onurcansevinc/discord-account-creator.git
 cd discord-account-creator
 npm install
 ```
 
-# How to use
+## How to use
 
 - Open the `index.js` and fill `captchakey`, `proxies_username`,  `proxies_password` variables.
 - Import your proxies to `proxies.txt`, script will be convert them to `proxies.json` so don't delete/edit `proxies.json`
