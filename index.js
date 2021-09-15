@@ -10,6 +10,8 @@ const db = require('node-localdb');
 const proxies = db('./proxies.json');
 const usernames = fs.readFileSync('usernames.txt', 'utf8').toString().trim().split('\r\n');
 const captchakey = ''; // token of 2captcha
+const proxies_username = '';
+const proxies_password = '';
 let emailTried = 0;
 setInterval(checkProxies, 60000);
 
@@ -51,15 +53,15 @@ async function createAccount() {
         ],
         defaultViewport: null,
         ignoreHTTPSErrors: true,
-        headless: true,
+        headless: false,
     }
     let browser = await puppeteer.launch(browser_config);
     console.log("Browser started with "+prox.proxy+ " proxy adress");
     try {
         let page = await browser.newPage();
         await page.authenticate({
-            username: 'lutzslle',
-            password: 'dablp7fw9zcm'
+            username: proxies_username,
+            password: proxies_password
         });
         let accountInfos = await createAccinfos(browser, page);
         accountInfos.proxy = prox.proxy;
