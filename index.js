@@ -258,6 +258,7 @@ function checkProxies(){
 }
 
 async function insertProxies(){
+    proxies.remove({});
     let proxiler = fs.readFileSync('proxies.txt', 'utf8');
     proxiler.toString().trim().split('\r\n').forEach(item => {
         proxies.insert({proxy: item, usable: true, time: +new Date / 1000});
