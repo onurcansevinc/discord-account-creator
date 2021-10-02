@@ -26,17 +26,10 @@ puppeteer.use(RecaptchaPlugin({
 }));
 
 start();
-function start(){
-    console.log('Checking proxies from database');
-    proxies.find({}).then(function(proxy){
-        if(proxy.length == 0){
-            console.log('No proxy found at database, proxies will instert to database');
-            insertProxies();
-        } else {
-            console.log('Proxies found at database, starting to create accounts');
-            createAccount();
-        }
-    });
+async function start(){
+    console.log('Proxies will instert to database');
+    await insertProxies();
+    createAccount();
 }
 
 async function createAccount() {
@@ -264,9 +257,10 @@ function checkProxies(){
     });
 }
 
-function insertProxies(){
+async function insertProxies(){
     let proxiler = fs.readFileSync('proxies.txt', 'utf8');
     proxiler.toString().trim().split('\r\n').forEach(item => {
         proxies.insert({proxy: item, usable: true, time: +new Date / 1000});
     });
+    return;
 }
