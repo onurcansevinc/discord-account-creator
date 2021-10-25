@@ -263,5 +263,6 @@ async function insertProxies(){
     proxiler.toString().trim().split('\r\n').forEach(item => {
         proxies.insert({proxy: item, usable: true, time: +new Date / 1000});
     });
+    console.log('All proxies have been successfully added to the database');
     return;
 }
