@@ -1,11 +1,12 @@
+const fs = require('fs');
+const axios = require('axios');
+const db = require('node-localdb');
+const linkify = require('linkifyjs');
+const sleep = require('sleep-promise');
+const gmailnator = require('gmailnator');
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const RecaptchaPlugin = require('puppeteer-extra-plugin-recaptcha');
-const fs = require('fs');
-const gmailnator = require('gmailnator');
-const sleep = require('sleep-promise');
-const linkify = require('linkifyjs');
-const db = require('node-localdb');
 
 const proxies = db('./proxies.json');
 const usernames = fs.readFileSync('usernames.txt', 'utf8').toString().trim().split('\r\n');
@@ -28,7 +29,7 @@ puppeteer.use(RecaptchaPlugin({
 start();
 async function start(){
     console.log('Proxies will instert to database');
-    await insertProxies();
+    //await insertProxies();
     createAccount();
 }
 
@@ -145,19 +146,18 @@ async function getMail(address, browser) {
                 if (body.emails.length > 0) {
                     emailTried = 0;
                     console.log("checking most recent email...");
-                    gmailnator.getMessage(body.emails[0].link, body.csrf, function (err, body) {
-                        if (err) {
-                            console.log("error getting most recent email: " + err);
-                        } else {
-                            let urls = linkify.find(body);
-                            for (let i = 0; i < urls.length; i++) {
-                                const link = urls[i].href;
-                                if (i == 5) {
-                                    resolve(link);
-                                }
+                    console.log(body.emails[1].link, body.emails)
+                    axios(body.emails[1].link).then(function (response) {
+                        let urls = linkify.find(response.data);
+                        for (let i = 0; i < urls.length; i++) {
+                            let link = urls[i].href;
+                            if (link.indexOf('https://click.discord.com/ls/click?upn=') > -1) {
+                                resolve(link);
                             }
                         }
-                    })
+                      }).catch(function (error) {
+                          console.log('Error', error);
+                      });
                 } else {
                     emailTried++;
                     await sleep(10000);
